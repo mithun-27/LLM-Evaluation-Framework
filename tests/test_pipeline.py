@@ -5,6 +5,7 @@ from app.evaluation.metrics.bertscore import BERTScoreMetric
 from app.evaluation.metrics.latency import LatencyMetric
 from app.evaluation.metrics.cost import CostMetric
 from app.evaluation.metrics.faithfulness import FaithfulnessMetric
+from app.evaluation.metrics.hallucination import HallucinationMetric
 
 def test_evaluation_pipeline():
     evaluator = Evaluator(
@@ -13,6 +14,7 @@ def test_evaluation_pipeline():
             ROUGEMetric(),
             BERTScoreMetric(),
             FaithfulnessMetric(),
+            HallucinationMetric(),
             LatencyMetric(),
             CostMetric()
         ]
