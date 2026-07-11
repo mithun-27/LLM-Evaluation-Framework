@@ -6,17 +6,21 @@ from app.evaluation.metrics.latency import LatencyMetric
 from app.evaluation.metrics.cost import CostMetric
 from app.evaluation.metrics.faithfulness import FaithfulnessMetric
 from app.evaluation.metrics.hallucination import HallucinationMetric
+from app.evaluation.metrics.bias import BiasMetric
+from app.evaluation.metrics.toxicity import ToxicityMetric
 
 def test_evaluation_pipeline():
     evaluator = Evaluator(
         metrics=[
-            BLEUMetric(),
-            ROUGEMetric(),
-            BERTScoreMetric(),
-            FaithfulnessMetric(),
-            HallucinationMetric(),
-            LatencyMetric(),
-            CostMetric()
+        BLEUMetric(),
+        ROUGEMetric(),
+        BERTScoreMetric(),
+        FaithfulnessMetric(),
+        HallucinationMetric(),
+        ToxicityMetric(),
+        BiasMetric(),
+        LatencyMetric(),
+        CostMetric()
         ]
     )
 
