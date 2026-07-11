@@ -2,14 +2,19 @@ from app.evaluation.evaluator import Evaluator
 from app.evaluation.metrics.bleu import BLEUMetric
 from app.evaluation.metrics.rouge import ROUGEMetric
 from app.evaluation.metrics.bertscore import BERTScoreMetric
-
+from app.evaluation.metrics.latency import LatencyMetric
+from app.evaluation.metrics.cost import CostMetric
+from app.evaluation.metrics.faithfulness import FaithfulnessMetric
 
 def test_evaluation_pipeline():
     evaluator = Evaluator(
         metrics=[
             BLEUMetric(),
             ROUGEMetric(),
-            BERTScoreMetric()
+            BERTScoreMetric(),
+            FaithfulnessMetric(),
+            LatencyMetric(),
+            CostMetric()
         ]
     )
 
@@ -25,7 +30,13 @@ def test_evaluation_pipeline():
 
     results = evaluator.evaluate(
         reference=reference,
-        prediction=prediction
+        prediction=prediction,
+        prompt="What is Artificial Intelligence?",
+        context=(
+        "Artificial Intelligence is the simulation "
+        "of human intelligence by machines."
+        ),
+        latency=1.24
     )
 
     print("\n========== LLM Evaluation ==========")

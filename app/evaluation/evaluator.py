@@ -5,10 +5,7 @@ from app.evaluation.metrics.base_metric import BaseMetric
 
 class Evaluator:
     """
-    Main evaluation engine.
-
-    Runs multiple evaluation metrics
-    against a reference and prediction.
+    Main LLM evaluation engine.
     """
 
     def __init__(self, metrics: List[BaseMetric]):
@@ -17,7 +14,8 @@ class Evaluator:
     def evaluate(
         self,
         reference: str,
-        prediction: str
+        prediction: str,
+        **kwargs
     ):
         results = {}
 
@@ -25,7 +23,8 @@ class Evaluator:
             try:
                 metric_result = metric.calculate(
                     reference=reference,
-                    prediction=prediction
+                    prediction=prediction,
+                    **kwargs
                 )
 
                 results[metric.name] = metric_result

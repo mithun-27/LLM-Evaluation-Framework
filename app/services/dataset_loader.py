@@ -4,6 +4,7 @@ import pandas as pd
 
 REQUIRED_COLUMNS = [
     "prompt",
+     "context",
     "reference_answer",
     "model_answer"
 ]
