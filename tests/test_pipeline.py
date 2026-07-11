@@ -1,29 +1,42 @@
-from app.evaluation.metrics.custom_metric import KeywordMatchMetric
+from app.evaluation.evaluator import Evaluator
+from app.evaluation.metrics.bleu import BLEUMetric
+from app.evaluation.metrics.rouge import ROUGEMetric
 
 
-def test_keyword_metric():
-    metric = KeywordMatchMetric()
+def test_evaluation_pipeline():
+    evaluator = Evaluator(
+        metrics=[
+            BLEUMetric(),
+            ROUGEMetric()
+        ]
+    )
 
     reference = (
-        "Artificial Intelligence enables machines to learn"
+        "Artificial Intelligence is the simulation "
+        "of human intelligence by machines"
     )
 
     prediction = (
-        "Artificial Intelligence helps machines learn"
+        "Artificial Intelligence allows machines "
+        "to simulate human intelligence"
     )
 
-    result = metric.calculate(
+    results = evaluator.evaluate(
         reference=reference,
         prediction=prediction
     )
 
-    print("\nMetric Result")
-    print(result)
+    print("\n========== Evaluation Results ==========")
 
-    assert "metric" in result
-    assert "score" in result
-    assert 0 <= result["score"] <= 1
+    for metric_name, result in results.items():
+        print(f"\n{metric_name}")
+        print(result)
+
+    print("\n========================================")
+
+    assert "BLEU" in results
+    assert "ROUGE" in results
 
 
 if __name__ == "__main__":
-    test_keyword_metric()
+    test_evaluation_pipeline()
