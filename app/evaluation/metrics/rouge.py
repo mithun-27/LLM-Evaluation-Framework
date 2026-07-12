@@ -1,3 +1,5 @@
+from typing import Any, Dict
+
 from rouge_score import rouge_scorer
 
 from app.evaluation.metrics.base_metric import BaseMetric
@@ -5,8 +7,8 @@ from app.evaluation.metrics.base_metric import BaseMetric
 
 class ROUGEMetric(BaseMetric):
     """
-    Calculates ROUGE scores between a reference answer
-    and a model-generated answer.
+    Calculates ROUGE-1, ROUGE-2, and ROUGE-L scores
+    between a reference answer and model prediction.
     """
 
     def __init__(self):
@@ -22,7 +24,8 @@ class ROUGEMetric(BaseMetric):
         reference: str,
         prediction: str,
         **kwargs
-    ):
+    ) -> Dict[str, Any]:
+
         if not reference or not prediction:
             return {
                 "metric": self.name,
