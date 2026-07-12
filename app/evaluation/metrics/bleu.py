@@ -1,6 +1,7 @@
-import re
+from typing import Any, Dict
 
 from nltk.translate.bleu_score import SmoothingFunction, sentence_bleu
+from nltk.tokenize import wordpunct_tokenize
 
 from app.evaluation.metrics.base_metric import BaseMetric
 
@@ -15,27 +16,21 @@ class BLEUMetric(BaseMetric):
         super().__init__(name="BLEU")
         self.smoothing_function = SmoothingFunction().method1
 
-    @staticmethod
-    def tokenize(text: str):
-        """
-        Convert text into lowercase word tokens.
-        """
-        return re.findall(r"\b\w+\b", text.lower())
-
     def calculate(
         self,
         reference: str,
         prediction: str,
         **kwargs
-    ):
+    ) -> Dict[str, Any]:
+
         if not reference or not prediction:
             return {
                 "metric": self.name,
                 "score": 0.0
             }
 
-        reference_tokens = self.tokenize(reference)
-        prediction_tokens = self.tokenize(prediction)
+        reference_tokens = wordpunct_tokenize(reference.lower())
+        prediction_tokens = wordpunct_tokenize(prediction.lower())
 
         score = sentence_bleu(
             [reference_tokens],
