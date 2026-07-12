@@ -118,3 +118,69 @@ class HumanEvaluationStore:
             )
 
         return self.output_path
+
+    def save_csv(self, results: List[Dict], path: Path = None) -> Path:
+        csv_path = path or self.output_path.with_suffix(".csv")
+        csv_path.parent.mkdir(parents=True, exist_ok=True)
+        import pandas as pd
+        df = pd.DataFrame(results)
+        df.to_csv(csv_path, index=False, encoding="utf-8")
+        return csv_path
+
+
+class SingleHumanEvaluationMetric(BaseMetric):
+    """
+    Collects human ratings (1-5) for a single model response.
+    """
+
+    def __init__(self):
+        super().__init__(name="Human Evaluation")
+
+    def _get_rating(self, criterion: str) -> int:
+        while True:
+            try:
+                val = input(f"Rate {criterion} (1-5): ").strip()
+                rating = int(val)
+                if 1 <= rating <= 5:
+                    return rating
+                print("Rating must be an integer between 1 and 5.")
+            except ValueError:
+                print("Invalid input. Please enter an integer between 1 and 5.")
+
+    def calculate(
+        self,
+        reference: str,
+        prediction: str,
+        **kwargs
+    ) -> Dict:
+        prompt = kwargs.get("prompt", "")
+
+        print("\n" + "=" * 60)
+        print("SINGLE RESPONSE HUMAN EVALUATION")
+        print("=" * 60)
+        print(f"\nPrompt:\n{prompt}")
+        print(f"\nReference Answer:\n{reference}")
+        print(f"\nModel Answer:\n{prediction}")
+        print("\n" + "-" * 60)
+
+        correctness = self._get_rating("Correctness")
+        relevance = self._get_rating("Relevance")
+        fluency = self._get_rating("Fluency")
+        helpfulness = self._get_rating("Helpfulness")
+
+        comment = input("\nOptional comment: ").strip()
+
+        avg_score = (correctness + relevance + fluency + helpfulness) / 4.0
+
+        return {
+            "metric": self.name,
+            "prompt": prompt,
+            "reference": reference,
+            "prediction": prediction,
+            "correctness": correctness,
+            "relevance": relevance,
+            "fluency": fluency,
+            "helpfulness": helpfulness,
+            "comment": comment,
+            "average_score": round(avg_score, 4)
+        }

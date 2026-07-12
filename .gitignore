@@ -47,6 +47,7 @@ reports/txt/*
 
 # MLflow
 mlruns/
+mlflow.db
 
 # Python cache
 *.pyo
