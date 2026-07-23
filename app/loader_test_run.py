@@ -1,4 +1,4 @@
-from services.dataset_loader import DatasetLoader
+from app.services.dataset_loader import DatasetLoader
 
 
 loader = DatasetLoader("datasets/sample_dataset.csv")

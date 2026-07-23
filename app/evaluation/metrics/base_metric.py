@@ -18,7 +18,7 @@ class BaseMetric(ABC):
         **kwargs
     ) -> Dict[str, Any]:
         """
-        Calculate the evaluation metric.
+        Calculate the metric score.
         """
         pass
 
